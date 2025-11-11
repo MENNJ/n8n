@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 
 const loginschema = z.object({
@@ -79,6 +80,7 @@ export function LoginForm() {
                                     type="button"
                                     disabled={isPending}
                                 >
+                                    <Image src="/image/github.svg" alt="github" width={20} height={20}/>
                                     Git Hub登录
                                 </Button>
                                 <Button 
@@ -87,6 +89,7 @@ export function LoginForm() {
                                     type="button"
                                     disabled={isPending}
                                 >
+                                    <Image src="/image/google.svg" alt="google" width={20} height={20}/>
                                     Google登录
                                 </Button>
                             </div>
