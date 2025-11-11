@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
+import { TRPCReactProvider } from "@/trpc/client";
+import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// 使用本地 Roboto 可变字体
+const roboto = localFont({
+  src: "../fonts/Roboto-VariableFont_wdth,wght.ttf",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -25,9 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${roboto.className} antialiased`}
       >
+        <TRPCReactProvider>
         {children}
+        <Toaster/>
+        </TRPCReactProvider>
       </body>
     </html>
   );
