@@ -3,6 +3,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 // 使用本地 Roboto 可变字体
 const roboto = localFont({
@@ -29,7 +30,9 @@ export default function RootLayout({
         className={`${roboto.className} antialiased`}
       >
         <TRPCReactProvider>
-        {children}
+        <NuqsAdapter>
+          {children}
+        </NuqsAdapter>
         <Toaster/>
         </TRPCReactProvider>
       </body>
