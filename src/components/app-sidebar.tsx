@@ -20,17 +20,17 @@ const menuItems = [{
     title: "Main",
     items:[
         {
-            title: "Workflows",
+            title: "工作流",
             Icon: FolderOpenIcon,
             url: "/workflows"
         },
         {
-            title: "Credentials",
+            title: "凭证",
             Icon: KeyIcon,
             url: "/credentials"
         },
         {
-            title: "Executions",
+            title: "执行",
             Icon: HistoryIcon,
             url: "/executions"
         }
