@@ -1,5 +1,5 @@
-import { useQueryStates } from "nuqs"
-import { workflowsParams } from "../params"
+import { useQueryStates } from "nuqs";
+import { workflowsParams } from "../params";
 export function useWorkflowsParams() {
-    return useQueryStates(workflowsParams)
+  return useQueryStates(workflowsParams);
 }

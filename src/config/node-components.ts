@@ -5,9 +5,9 @@ import { NodeType } from "@/generated/prisma/enums";
 import type { NodeTypes } from "@xyflow/react";
 
 export const nodeComponents = {
-    [NodeType.INITIAL]:InitialNode,
-    [NodeType.HTTP_REQUEST]:HttpRequestNode,
-    [NodeType.MANUAL_TRIGGER]:ManualTriggerNode,
-} as const satisfies NodeTypes
+  [NodeType.INITIAL]: InitialNode,
+  [NodeType.HTTP_REQUEST]: HttpRequestNode,
+  [NodeType.MANUAL_TRIGGER]: ManualTriggerNode,
+} as const satisfies NodeTypes;
 
 export type RegisteredNodeTypes = keyof typeof nodeComponents;

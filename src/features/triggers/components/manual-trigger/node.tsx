@@ -7,22 +7,19 @@ import { memo, useState } from "react";
 export const ManualTriggerNode = memo((props: NodeProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const nodeStatus = 'success';
+  const nodeStatus = "loading";
   const handleOpenSettings = () => setDialogOpen(true);
-	return (
-        <>
-          <ManualTriggerDialog 
-          open={dialogOpen} 
-          onOpenChange={setDialogOpen}
-          />
-          <BaseTriggerNode
-            {...props}
-            icon={MousePointerIcon}
-            name="手动触发"
-            status={nodeStatus}
-            onSettings={handleOpenSettings}
-            onDoubleClick={handleOpenSettings}
-          />
-        </>
-    )
-})
+  return (
+    <>
+      <ManualTriggerDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <BaseTriggerNode
+        {...props}
+        icon={MousePointerIcon}
+        name="手动触发器" // Manual Trigger
+        status={nodeStatus}
+        onSettings={handleOpenSettings}
+        onDoubleClick={handleOpenSettings}
+      />
+    </>
+  );
+});

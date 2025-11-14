@@ -1,60 +1,54 @@
-"use client"
+"use client";
 
-import { NodeToolbar, Position } from "@xyflow/react"
-import { SettingsIcon,TrashIcon } from "lucide-react"
-import type { ReactNode } from "react"
-import { Button } from "@/components/ui/button"
+import { NodeToolbar, Position } from "@xyflow/react";
+import { SettingsIcon, TrashIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 
 interface WorkflowNodeProps {
-  children: ReactNode
-  showToolbar?: boolean
-  onDelets?: () => void
-  onSettings?: () => void
-  name?: string
-  description?: string
+  children: ReactNode;
+  showToolbar?: boolean;
+  onDelets?: () => void;
+  onSettings?: () => void;
+  name?: string;
+  description?: string;
 }
 
-export function WorkflowNode({ 
-children,
-showToolbar = true,
-onDelets, 
-onSettings,
-name,
-description
+export function WorkflowNode({
+  children,
+  showToolbar = true,
+  onDelets,
+  onSettings,
+  name,
+  description,
 }: WorkflowNodeProps) {
-  return(
+  return (
     <>
-       {
-        showToolbar &&(
-            <NodeToolbar>
-                <Button size="sm" variant="ghost" onClick={onSettings}>
-                    <SettingsIcon className="size-4" />
-                </Button>
-                <Button size="sm" variant="ghost" onClick={onDelets}>
-                    <TrashIcon className="size-4" />
-                </Button>
-            </NodeToolbar>
-        )
-       }
-       {children}
-       {
-        name &&(
-            <NodeToolbar
-             position={Position.Bottom}
-             isVisible
-             className="max-w-[200px] text-center"
-            >
-             <p className="font-medium">
-                {name}
-             </p>
-            {description &&(
-                <p className="text-muted-foreground truncate text-sm">
-                    {description}
-                </p>
-            )}
-            </NodeToolbar>
-        )
-       }
+      {showToolbar && (
+        <NodeToolbar>
+          <Button size="sm" variant="ghost" onClick={onSettings}>
+            <SettingsIcon className="size-4" />
+          </Button>
+          <Button size="sm" variant="ghost" onClick={onDelets}>
+            <TrashIcon className="size-4" />
+          </Button>
+        </NodeToolbar>
+      )}
+      {children}
+      {name && (
+        <NodeToolbar
+          position={Position.Bottom}
+          isVisible
+          className="max-w-[200px] text-center"
+        >
+          <p className="font-medium">{name}</p>
+          {description && (
+            <p className="text-muted-foreground truncate text-sm">
+              {description}
+            </p>
+          )}
+        </NodeToolbar>
+      )}
     </>
-  )
+  );
 }

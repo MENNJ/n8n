@@ -1,13 +1,10 @@
-"use client"
+"use client";
 
-import { createId } from "@paralleldrive/cuid2"
-import { useReactFlow } from "@xyflow/react"
-import { 
-GlobeIcon,
-MousePointerIcon
-} from "lucide-react"
-import { useCallback } from "react"
-import { toast } from "sonner"
+import { createId } from "@paralleldrive/cuid2";
+import { useReactFlow } from "@xyflow/react";
+import { GlobeIcon, MousePointerIcon } from "lucide-react";
+import { useCallback } from "react";
+import { toast } from "sonner";
 import {
   Sheet,
   SheetClose,
@@ -17,94 +14,96 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { NodeType } from "@/generated/prisma/enums"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/sheet";
+import { NodeType } from "@/generated/prisma/enums";
+import { Separator } from "@/components/ui/separator";
 export type NodeTypeOptions = {
-  type: NodeType
-  label: string
-  description: string
-  icon: React.ComponentType<{className?: string}>| string
-}
+  type: NodeType;
+  label: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }> | string;
+};
 const triggerNodes: NodeTypeOptions[] = [
   {
     type: NodeType.MANUAL_TRIGGER,
     label: "手动触发",
     description: "点击按钮即可运行流程，非常适合快速入门。",
     icon: MousePointerIcon,
-  }
-]
+  },
+];
 const executionNodes: NodeTypeOptions[] = [
   {
     type: NodeType.HTTP_REQUEST,
     label: "HTTP请求",
     description: "发出一个请求",
     icon: GlobeIcon,
-  }
-]
+  },
+];
 
 interface NodeSelectorProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
 }
 
-export function NodeSelector({ 
-  open, 
-  onOpenChange, 
-  children 
+export function NodeSelector({
+  open,
+  onOpenChange,
+  children,
 }: NodeSelectorProps) {
-  const { setNodes,getNodes,screenToFlowPosition } = useReactFlow();
-  const handleNodeSelect = useCallback((selection: NodeTypeOptions) => {
-    if(selection.type === NodeType.MANUAL_TRIGGER){
-      const nodes = getNodes()
-      const hasManualTrigger = nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER)
-      if(hasManualTrigger){
-        toast.error("工作流中只能有一个手动触发节点")
-        return
+  const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
+  const handleNodeSelect = useCallback(
+    (selection: NodeTypeOptions) => {
+      if (selection.type === NodeType.MANUAL_TRIGGER) {
+        const nodes = getNodes();
+        const hasManualTrigger = nodes.some(
+          (node) => node.type === NodeType.MANUAL_TRIGGER,
+        );
+        if (hasManualTrigger) {
+          toast.error("工作流中只能有一个手动触发节点");
+          return;
+        }
       }
-    }
-    setNodes((nodes=>{
-      const hasInitialTrigger = nodes.some((node) => node.type === NodeType.INITIAL)
+      setNodes((nodes) => {
+        const hasInitialTrigger = nodes.some(
+          (node) => node.type === NodeType.INITIAL,
+        );
 
-      const centerX = window.innerWidth / 2
-      const centerY = window.innerHeight / 2
-      const flowPosition = screenToFlowPosition({
-        x: centerX + (Math.random()-0.5) * 200,
-        y: centerY + (Math.random()-0.5) * 200,
-      })
-      const newNode = {
-        id: createId(),
-        data : {},
-        position: flowPosition,
-        type: selection.type,
-      };
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const flowPosition = screenToFlowPosition({
+          x: centerX + (Math.random() - 0.5) * 200,
+          y: centerY + (Math.random() - 0.5) * 200,
+        });
+        const newNode = {
+          id: createId(),
+          data: {},
+          position: flowPosition,
+          type: selection.type,
+        };
 
-      if(hasInitialTrigger){
-        return [newNode]
-      }
+        if (hasInitialTrigger) {
+          return [newNode];
+        }
 
-      return [...nodes,newNode]
+        return [...nodes, newNode];
 
-      // if(hasInitialTrigger){
-      //   const initial = nodes.find((node) => node.type === NodeType.INITIAL)
-      //   const replacement = {
-      //     id: initial?.id || newNode.id,
-      //     data : newNode.data,
-      //     position: initial?.position || newNode.position,
-      //     type: selection.type,
-      //   };
-      //   return nodes.map((node) => (node.id === replacement?.id ? replacement : node))
-      // }
-      // return [...nodes,newNode]
-    }))
-    onOpenChange(false)
-  },[
-    setNodes,
-    getNodes,
-    screenToFlowPosition,
-    onOpenChange
-  ])
+        // if(hasInitialTrigger){
+        //   const initial = nodes.find((node) => node.type === NodeType.INITIAL)
+        //   const replacement = {
+        //     id: initial?.id || newNode.id,
+        //     data : newNode.data,
+        //     position: initial?.position || newNode.position,
+        //     type: selection.type,
+        //   };
+        //   return nodes.map((node) => (node.id === replacement?.id ? replacement : node))
+        // }
+        // return [...nodes,newNode]
+      });
+      onOpenChange(false);
+    },
+    [setNodes, getNodes, screenToFlowPosition, onOpenChange],
+  );
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -112,76 +111,74 @@ export function NodeSelector({
       <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto">
         <SheetHeader>
           <SheetTitle>是什么触发了这个工作流?</SheetTitle>
-          <SheetDescription>
-            触发器是启动工作流的一个步骤.
-          </SheetDescription>
+          <SheetDescription>触发器是启动工作流的一个步骤.</SheetDescription>
         </SheetHeader>
         <div>
-          {triggerNodes.map((nodeType) =>{
-             const Icon = nodeType.icon;
-              return(
-                <div 
-                 key={nodeType.type}
-                 className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary"
-                 onClick={()=>handleNodeSelect(nodeType)}
-                >
-                  <div className="flex items-center gap-6 w-full overflow-hidden">
-                    {typeof Icon === "string" ?(
-                      <img
-                       src={Icon}
-                       alt={nodeType.label}
-                       className="size-5 object-contain rounded-sm"
-                      />
-                    ):(
-                      <Icon className="size-5" />
-                    )}
-                    <div className="flex flex-col items-start text-left">
-                      <span className="font-medium text-sm">
-                        {nodeType.label}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {nodeType.description}
-                      </span>
-                    </div>
+          {triggerNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
+                  ) : (
+                    <Icon className="size-5" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
-              )
+              </div>
+            );
           })}
         </div>
-        <Separator/>
+        <Separator />
         <div>
-          {executionNodes.map((nodeType) =>{
-             const Icon = nodeType.icon;
-              return(
-                <div 
-                 key={nodeType.type}
-                 className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary"
-                 onClick={()=>handleNodeSelect(nodeType)}
-                >
-                  <div className="flex items-center gap-6 w-full overflow-hidden">
-                    {typeof Icon === "string" ?(
-                      <img
-                       src={Icon}
-                       alt={nodeType.label}
-                       className="size-5 object-contain rounded-sm"
-                      />
-                    ):(
-                      <Icon className="size-5" />
-                    )}
-                    <div className="flex flex-col items-start text-left">
-                      <span className="font-medium text-sm">
-                        {nodeType.label}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {nodeType.description}
-                      </span>
-                    </div>
+          {executionNodes.map((nodeType) => {
+            const Icon = nodeType.icon;
+            return (
+              <div
+                key={nodeType.type}
+                className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary"
+                onClick={() => handleNodeSelect(nodeType)}
+              >
+                <div className="flex items-center gap-6 w-full overflow-hidden">
+                  {typeof Icon === "string" ? (
+                    <img
+                      src={Icon}
+                      alt={nodeType.label}
+                      className="size-5 object-contain rounded-sm"
+                    />
+                  ) : (
+                    <Icon className="size-5" />
+                  )}
+                  <div className="flex flex-col items-start text-left">
+                    <span className="font-medium text-sm">
+                      {nodeType.label}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {nodeType.description}
+                    </span>
                   </div>
                 </div>
-              )
+              </div>
+            );
           })}
         </div>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
